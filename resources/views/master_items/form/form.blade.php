@@ -1,4 +1,4 @@
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     @csrf
     @if($method == 'edit')
     <div class="form-group">
@@ -20,6 +20,17 @@
     <div class="form-group">
         <label>Laba (dalam persen)</label>
         <input type="number" class="form-control" name="laba" required  value="{{$item->laba ?? ''}}">
+    </div>
+
+    @if($method == 'edit')
+    <div class="form-group pt-2">
+        <img src="{{ asset('storage/master_items/' . $item->foto) }}" width="100" alt="foto item">
+    </div>
+    @endif
+
+    <div class="form-group">
+        <label>Foto</label>
+        <input type="file" class="form-control" name="foto" {{ $method == 'new' ? 'required' : '' }}>
     </div>
 
     @php $selected = $item->supplier ?? ''; @endphp

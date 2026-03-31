@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MasterItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MasterItemsController extends Controller
 {
@@ -43,6 +44,7 @@ class MasterItemsController extends Controller
         }
         $data['item'] = $item;
         $data['method'] = $method;
+        // dd($data);
         return view('master_items.form.index', $data);
     }
 
@@ -71,6 +73,25 @@ class MasterItemsController extends Controller
         $data_item->kode = $kode;
         $data_item->supplier = $request->supplier;
         $data_item->jenis = $request->jenis;
+
+        // handle upload image
+        if ($request->hasFile('foto')) {
+            if ($method != 'new' && $data_item->foto) {
+                Storage::delete('public/master_items/' . $data_item->foto);
+            }
+
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $file->storeAs('public/master_items', $filename);
+
+            $data_item->foto = $filename;
+        }  else {
+            if ($method == 'edit') {
+                $data_item->foto = $data_item->foto;
+            }
+        }
+
         $data_item->save();
 
         return redirect('master-items');

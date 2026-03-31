@@ -37,10 +37,22 @@
                             <td>:</td>
                             <td>{{$data->supplier}}</td>
                         </tr>
+
                         <tr>
                             <th>Jenis</th>
                             <td>:</td>
                             <td>{{$data->jenis}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Foto</th>
+                            <td>
+                                @if($data->foto)
+                                    <img src="{{ asset('storage/master_items/'.$data->foto) }}" width="120">
+                                @else
+                                    -
+                                @endif
+                            </td>
                         </tr>
                     </table>
                     <a class="btn btn-info" href="{{url('master-items/form/edit')}}/{{$data->id}}">Edit</a>
