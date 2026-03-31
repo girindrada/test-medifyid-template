@@ -14,4 +14,9 @@ class KategoriItem extends Model
         'kode',
         'nama',
     ];
+
+    public function items()
+    {
+        return $this->hasMany(MasterItem::class, 'kategori_id');
+    }
 }

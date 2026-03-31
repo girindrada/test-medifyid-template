@@ -53,6 +53,8 @@
                     })
                     array_temp.push(harga_jual)
                     array_temp.push(item.supplier)
+                    // array_temp.push(item.kategori_id)
+                    array_temp.push(item.kategori ? item.kategori.nama : '-')
                     array_temp.push(html)
 
                     dataTableObj.row.add(array_temp).draw(true);

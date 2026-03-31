@@ -33,6 +33,16 @@
         <input type="file" class="form-control" name="foto" {{ $method == 'new' ? 'required' : '' }}>
     </div>
 
+    <div class="form-group">
+        <label>Kategori</label>
+        <select class="form-control" required name="kategori_id">
+            <option value="">--Pilih--</option>
+            @foreach($kategori_items as $kategori)
+                <option value="{{$kategori->id}}" @if(($item->kategori_id ?? '') == $kategori->id) selected @endif>{{$kategori->nama}}</option>
+            @endforeach
+        </select>
+    </div>
+
     @php $selected = $item->supplier ?? ''; @endphp
     <div class="form-group">
         <label>Supplier</label>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MasterItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use \App\Models\KategoriItem;
 
 class MasterItemsController extends Controller
 {
@@ -20,14 +21,15 @@ class MasterItemsController extends Controller
         $hargamin = $request->hargamin;
         $hargamax = $request->hargamax;
 
-        $data_search = MasterItem::query();
+        // $data_search = MasterItem::query();
+        $data_search = MasterItem::with('kategori:id,nama'); // eagerload kategori relationship
 
         if (!empty($kode)) $data_search = $data_search->where('kode', $kode);
         if (!empty($nama)) $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
         if (!empty($hargamin)) $data_search = $data_search->where('harga_beli', '>=', $hargamin);
         if (!empty($hargamax)) $data_search = $data_search->where('harga_beli', '<=', $hargamax);
 
-        $data_search = $data_search->select('kode', 'nama', 'jenis', 'harga_beli', 'laba', 'supplier')->orderBy('id')->get();
+        $data_search = $data_search->select('kode', 'nama', 'jenis', 'harga_beli', 'laba', 'supplier', 'kategori_id')->orderBy('id')->get();
 
         return json_encode([
             'status' => 200,
@@ -40,17 +42,18 @@ class MasterItemsController extends Controller
         if ($method == 'new') {
             $item = [];
         } else {
-            $item = MasterItem::find($id);
+            $item = MasterItem::with('kategori')->find($id);
         }
         $data['item'] = $item;
         $data['method'] = $method;
+        $data['kategori_items'] = KategoriItem::all();
         // dd($data);
         return view('master_items.form.index', $data);
     }
 
     public function singleView($kode)
     {
-        $data['data'] = MasterItem::where('kode', $kode)->first();
+        $data['data'] = MasterItem::with('kategori')->where('kode', $kode)->first();
         return view('master_items.single.index', $data);
     }
 
@@ -73,6 +76,7 @@ class MasterItemsController extends Controller
         $data_item->kode = $kode;
         $data_item->supplier = $request->supplier;
         $data_item->jenis = $request->jenis;
+        $data_item->kategori_id = $request->kategori_id;
 
         // handle upload image
         if ($request->hasFile('foto')) {

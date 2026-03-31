@@ -45,6 +45,12 @@
                         </tr>
 
                         <tr>
+                            <th>Kategori</th>
+                            <td>:</td>
+                            <td>{{$data->kategori ? $data->kategori->nama : '-'}}</td>
+                        </tr>
+
+                        <tr>
                             <th>Foto</th>
                             <td>
                                 @if($data->foto)
