@@ -6,7 +6,8 @@ use App\Models\MasterItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use \App\Models\KategoriItem;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\MasterItemsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MasterItemsController extends Controller
 {
@@ -137,5 +138,11 @@ class MasterItemsController extends Controller
         $array = ['Obat','Alkes','Matkes','Umum','ATK'];
         $random = rand(0,4);
         return $array[$random];
+    }
+
+    public function exportExcel()
+    {
+        $filename = 'master-items-' . now()->format('Ymd-His') . '.xlsx';
+        return Excel::download(new MasterItemsExport(), $filename);
     }
 }
