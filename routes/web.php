@@ -38,4 +38,7 @@ Route::post('/kategori-items/form/{method}/{id?}', [App\Http\Controllers\Kategor
 Route::get('/kategori-items/view/{kode}', [App\Http\Controllers\KategoriItemController::class, 'singleView']);
 Route::get('/kategori-items/delete/{id}', [App\Http\Controllers\KategoriItemController::class, 'delete']);
 
+Route::get('master-kategori/{id}/pdf', [App\Http\Controllers\MasterItemsController::class, 'exportPdf'])->name('exportPdf');
+Route::get('kategori-items/{id}/pdf', [App\Http\Controllers\KategoriItemController::class, 'exportPdf'])->name('exportKategoriPdf');
+
 Route::get('/master-items/update-random-data', [App\Http\Controllers\MasterItemsController::class, 'updateRandomData']);

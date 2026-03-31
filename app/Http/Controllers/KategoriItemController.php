@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\KategoriItem;
 use Illuminate\Http\Request;
 
@@ -74,5 +74,17 @@ class KategoriItemController extends Controller
     {
         KategoriItem::find($id)->delete();
         return redirect('kategori-items');
+    }
+
+    public function exportPdf($id)
+    {
+        $kategori = KategoriItem::findOrFail($id);
+
+        $pdf = Pdf::loadView('kategori_items.export.pdf', [
+                'kategori' => $kategori,
+                'printed_at' => now()->locale('id')->isoFormat('dddd, D MMMM YYYY HH:mm:ss'),
+            ])->setPaper('a4', 'portrait');
+
+        return $pdf->download('kategori-item-' . $kategori->kode . '.pdf');
     }
 }
